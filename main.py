@@ -128,7 +128,7 @@ animated_stickers = [
     "CAACAgUAAxkDAAEBOrhmghfVCw4p7a086abOjAa-cmCg7wACBgwAAlGZeVYCjKZ5VFgb2h4E"
 ]
 
-@app.on_message(filters.command(["animate_stickers"], prefixes="!") & (filters.private | filters.channel))
+@acc.on_message(filters.command(["animate_stickers"], prefixes="!") & (filters.private | filters.channel))
 async def start_sticker_animation(client, message):
     for sticker in animated_stickers:
         sent_message = await client.send_sticker(message.chat.id, sticker)
