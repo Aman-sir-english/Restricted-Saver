@@ -119,6 +119,23 @@ async def save_media(msg, sender, media_type):
         print("Peer ID invalid.")
     except Exception as e:
         print(f"An error occurred: {e}")
+        
+        
+animated_stickers = [
+    "CAACAgUAAxkDAAEBOrJmgheC_fWJCCsB7OONOt5-ducS6wACJg0AAkbwaVZc7Q0OPZbiAx4E",  # Replace with your sticker file_id
+    "CAACAgUAAxkDAAEBOrVmgheTS4hukiuH7264ecw01RbaxQAC6Q8AAqCZ-Fbtiwp4DLOwXx4E",
+    "CAACAgUAAxkDAAEBOrhmghfVCw4p7a086abOjAa-cmCg7wACBgwAAlGZeVYCjKZ5VFgb2h4E"
+]
+
+@acc.on_message(filters.command(["animate_stickers"], prefixes="!") & filters.private)
+async def start_sticker_animation(client, message):
+    for sticker in animated_stickers:
+        await client.send_sticker(message.chat.id, sticker)
+        await asyncio.sleep(1)
+
+
+
+        
 @acc.on_message(filters.command(["file_id"], prefixes="/") & filters.reply & filters.me)
 async def get_sticker_file_id(client, message):
     if message.reply_to_message and message.reply_to_message.sticker:
