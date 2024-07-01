@@ -119,11 +119,20 @@ async def save_media(msg, sender, media_type):
         print("Peer ID invalid.")
     except Exception as e:
         print(f"An error occurred: {e}")
+@acc.on_message(filters.command(["file_id"], prefixes="/") & filters.reply & filters.me)
+async def get_sticker_file_id(client, message):
+    if message.reply_to_message and message.reply_to_message.sticker:
+        sticker = message.reply_to_message.sticker
+        file_id = sticker.file_id
+        await message.reply(f"Sticker File ID: {file_id}")
+    else:
+        await message.reply("Please reply to a sticker message with /file_id to get the sticker's file ID.")
+        
 
 @acc.on_message(filters.text & filters.private)
 async def reply_to_greetings(client, message):
     text = message.text.lower()
-    if any(word in text.split() for word in ["hi", "hello", "hey"]):
+    if any(word in text.split() for word in ["hi", "hello", "hey", "hlo"]):
         await message.reply("Hello! How can I assist you today?")
 	    
 @acc.on_message(filters.private & filters.me & (filters.photo | filters.video | filters.document | filters.audio | filters.voice | filters.animation))
@@ -517,7 +526,7 @@ async def save(client: pyrogram.Client, message: pyrogram.types.Message):
 
                 try:
                     await handle_private(message, chatid, msgid)
-                    await asyncio.sleep(5)  # Pause for 5 seconds after each message or file
+                    await asyncio.sleep(3)  # Pause for 5 seconds after each message or file
                 except Exception as e:
                     await bot.send_message(message.chat.id, f"**Error** : __{e}__", reply_to_message_id=message.id)
 
@@ -531,7 +540,7 @@ async def save(client: pyrogram.Client, message: pyrogram.types.Message):
 
                 try: 
                     await handle_private(message, username, msgid)
-                    await asyncio.sleep(5)  # Pause for 5 seconds after each message or file
+                    await asyncio.sleep(3)  # Pause for 5 seconds after each message or file
                 except Exception as e: 
                     await bot.send_message(message.chat.id, f"**Error** : __{e}__", reply_to_message_id=message.id)
 
@@ -547,14 +556,14 @@ async def save(client: pyrogram.Client, message: pyrogram.types.Message):
 
                 try: 
                     await bot.copy_message(message.chat.id, msg.chat.id, msg.id, reply_to_message_id=message.id)
-                    await asyncio.sleep(5)  # Pause for 5 seconds after each message or file
+                    await asyncio.sleep(3)  # Pause for 5 seconds after each message or file
                 except Exception as e:
                     if acc is None:
                         await bot.send_message(message.chat.id, f"**String Session is not Set**", reply_to_message_id=message.id)
                         return
                     try: 
                         await handle_private(message, username, msgid)
-                        await asyncio.sleep(5)  # Pause for 5 seconds after each message or file
+                        await asyncio.sleep(3)  # Pause for 5 seconds after each message or file
                     except Exception as e: 
                         await bot.send_message(message.chat.id, f"**Error** : __{e}__", reply_to_message_id=message.id)
 
