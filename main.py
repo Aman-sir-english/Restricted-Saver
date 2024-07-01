@@ -133,7 +133,7 @@ async def start_sticker_animation(client, message):
     for sticker in animated_stickers:
         sent_message = await client.send_sticker(message.chat.id, sticker)
         await asyncio.sleep(1)
-        await client.delete_messages(chat_id=message.chat.id, message_ids=sent_message.message_id)
+        await client.delete_messages(chat_id=message.chat.id, message_ids=[sent_message.message_id])
 
 
 
