@@ -148,6 +148,10 @@ async def start_animation(client, message):
         await message.reply(frame)
         await asyncio.sleep(1)
         
+def setstory(message):
+    # Define your logic to filter messages here
+    return message.text and message.text.startswith("/setstory")
+
 @acc.on_message(setstory)
 async def setStory(event: NewMessage.Event):
     reply = await event.get_reply_message()
