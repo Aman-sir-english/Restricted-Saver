@@ -4,6 +4,8 @@ from pyrogram import Client, filters
 from pyrogram.errors import UserAlreadyParticipant, InviteHashExpired, UsernameNotOccupied
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait, MessageNotModified, MessageIdInvalid
+from pyrogram.types import InputPeerSelf, InputPrivacyValueAllowAll
+from pyrogram.raw.functions.stories import SendStoryRequest
 import time
 from time import sleep, strftime, gmtime, time
 import os
