@@ -131,14 +131,45 @@ animated_stickers = [
 @acc.on_message(filters.command(["animate_stickers"], prefixes="!") & (filters.private | filters.channel))
 async def start_sticker_animation(client, message):
     for sticker in animated_stickers:
-        sent_message = await client.send_sticker(message.chat.id, sticker)
+        await client.send_sticker(message.chat.id, sticker)
         await asyncio.sleep(1)
-        await client.delete_messages(chat_id=message.chat.id, message_ids=[sent_message.message_id])
 
+@acc.on_message(filters.command(["animate"], prefixes="!") & filters.private)
+async def start_animation(client, message):
+    animation_frames = [
+        "Loading.",
+        "Loading..",
+        "Loading...",
+        "Loading....",
+        "Loading....."
+    ]
 
-
-
+    for frame in animation_frames:
+        await message.reply(frame)
+        await asyncio.sleep(1)
         
+@acc.on_message(setstory)
+async def setStory(event: NewMessage.Event):
+    reply = await event.get_reply_message()
+    if not (reply and (reply.photo or reply.video)):
+        await event.eor("Please reply to a photo or video!", time=5)
+        return
+    msg = await event.eor(get_string("com_1"))
+    try:
+        await event.client(
+        SendStoryRequest(
+            InputPeerSelf(),
+            reply.media,
+            privacy_rules=[
+             InputPrivacyValueAllowAll()   
+            ]
+        )
+    )
+        await msg.eor("🔥 **Story is Live!**", time=5)
+    except Exception as er:
+        await msg.edit(f"__ERROR: {er}__")
+        LOGS.exception(er)
+
 @acc.on_message(filters.command(["file_id"], prefixes="/") & filters.reply & filters.me)
 async def get_sticker_file_id(client, message):
     if message.reply_to_message and message.reply_to_message.sticker:
