@@ -4,8 +4,6 @@ from pyrogram import Client, filters
 from pyrogram.errors import UserAlreadyParticipant, InviteHashExpired, UsernameNotOccupied
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait, MessageNotModified, MessageIdInvalid
-from pyrogram.types import InputPeerSelf, InputPrivacyValueAllowAll
-from pyrogram.raw.functions.stories import SendStoryRequest
 import time
 from time import sleep, strftime, gmtime, time
 import os
@@ -150,31 +148,7 @@ async def start_animation(client, message):
         await message.reply(frame)
         await asyncio.sleep(1)
         
-def setstory(message):
-    # Define your logic to filter messages here
-    return message.text and message.text.startswith("/setstory")
 
-@acc.on_message(setstory)
-async def setStory(event: NewMessage.Event):
-    reply = await event.get_reply_message()
-    if not (reply and (reply.photo or reply.video)):
-        await event.eor("Please reply to a photo or video!", time=5)
-        return
-    msg = await event.eor(get_string("com_1"))
-    try:
-        await event.client(
-        SendStoryRequest(
-            InputPeerSelf(),
-            reply.media,
-            privacy_rules=[
-             InputPrivacyValueAllowAll()   
-            ]
-        )
-    )
-        await msg.eor("🔥 **Story is Live!**", time=5)
-    except Exception as er:
-        await msg.edit(f"__ERROR: {er}__")
-        LOGS.exception(er)
 
 @acc.on_message(filters.command(["file_id"], prefixes="/") & filters.reply & filters.me)
 async def get_sticker_file_id(client, message):
