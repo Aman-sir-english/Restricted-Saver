@@ -128,11 +128,15 @@ animated_stickers = [
     "CAACAgUAAxkDAAEBOrhmghfVCw4p7a086abOjAa-cmCg7wACBgwAAlGZeVYCjKZ5VFgb2h4E"
 ]
 
-@acc.on_message(filters.command(["animate_stickers"], prefixes="!") & (filters.private | filters.channel))
+@app.on_message(filters.command(["animate_stickers"], prefixes="!") & (filters.private | filters.channel))
 async def start_sticker_animation(client, message):
     for sticker in animated_stickers:
-        await client.send_sticker(message.chat.id, sticker)
-        await asyncio.sleep(1)
+        sent_message = await client.send_sticker(message.chat.id, sticker)
+        await asyncio.sleep(2)  # Adjust delay as needed
+        
+        # Delete the sent sticker after sending the next one
+        await client.delete_messages(message.chat.id, sent_message.message_id)
+        await asyncio.sleep(1)  # Adjust delay as needed
 
 
         
